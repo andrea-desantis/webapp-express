@@ -6,7 +6,9 @@ const router = express.Router()
 
 // INDEX 
 router.get("/", postsController.index);
+
 // SHOW 
+router.get("/:id", postsController.show)
 
 // STORE 
 
