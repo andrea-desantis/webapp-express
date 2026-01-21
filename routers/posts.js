@@ -5,7 +5,7 @@ import postsController from '../controllers/postsController.js'
 const router = express.Router()
 
 // INDEX 
-
+router.get("/", postsController.index);
 // SHOW 
 
 // STORE 
@@ -15,4 +15,4 @@ const router = express.Router()
 // DESTROY
 
 
-export default router
+export default router;
