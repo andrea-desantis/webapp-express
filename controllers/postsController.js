@@ -14,18 +14,13 @@ function index(req, res, next) {
 }
 
 // SHOW
-function show(req, res) {
+function show(req, res, next) {
     const id = parseInt(req.params.id);
-    
+
     const query = "SELECT * FROM `movies` WHERE `movies`.`id` = ?;"
 
     connection.query(query, [id], (err, result) => {
-        if(err) {
-            res.status(500);
-            return res.json({
-                message: "internal server error"
-            });
-        }
+        if(err) return next(err);
         if (result.length === 0){
             res.status(404);
             res.json({
