@@ -17,24 +17,29 @@ function index(req, res, next) {
 function show(req, res, next) {
     const id = parseInt(req.params.id);
 
-    const query = "SELECT * FROM `movies` WHERE `movies`.`id` = ?;"
+    const movieQuery = "SELECT * FROM `movies` WHERE `id` = ?";
+    const reviewsQuery = "SELECT * FROM `reviews` WHERE `movie_id` = ?";
 
-    connection.query(query, [id], (err, result) => {
-        if(err) return next(err);
-        if (result.length === 0){
-            res.status(404);
-            res.json({
-                message: "Not Found"
-            });
-        } else {
-            const movie = result[0];
-            res.json(movie);
+    connection.query(movieQuery, [id], (err, movieResult) => {
+        if (err) return next(err);
+
+        if (movieResult.length === 0) {
+            return res.status(404).json({ message: "Not Found" });
         }
+
+        const movie = movieResult[0];
+
+        connection.query(reviewsQuery, [id], (err, reviewsResult) => {
+            if (err) return next(err);
+
+            movie.reviews = reviewsResult;
+            res.json(movie);
+        });
     });
 }
 
 const controller = {
     index,
     show,
-} 
+}
 export default controller
